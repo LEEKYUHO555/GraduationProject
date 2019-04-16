@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 
 ######## STATUS AND CONSTANTS
 
-is_quantize = True
-is_BP_quantize = True
+is_quantize = False
+is_BP_quantize = False
 is_DFA = True
-is_weight_quantize = True
+is_weight_quantize = False
 is_train = True
 EPOCH = 100
 batch_size = 100

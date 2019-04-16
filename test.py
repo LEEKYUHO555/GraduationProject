@@ -50,12 +50,6 @@
 
 
 import tensorflow as tf
-
-# mnist = tf.keras.datasets.mnist
-#
-# (x_train, y_train),(x_test, y_test) = mnist.load_data()
-# x_train, x_test = x_train / 255.0, x_test / 255.0
-
 from tensorflow.examples.tutorials.mnist import input_data
 
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)

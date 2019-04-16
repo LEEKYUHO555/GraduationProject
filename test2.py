@@ -10,9 +10,9 @@ is_BP_quantize = True
 is_DFA = True
 is_weight_quantize = True
 is_train = True
-EPOCH = 100
+EPOCH = 30
 batch_size = 100
-learning_rate = 0.1
+learning_rate = 0.1       # batch size 1일땐 0.001 근처로 설정해야 하는 것 같음. batch size 100일 땐 0.1 로도 충분함
 quantize_size = 20
 
 ######## USEFUL FUNCs
@@ -77,7 +77,7 @@ else:
     bias1 = np.full(512, 0.00)                                  # can be slight positive biased for DEAD RELUs 원래 0.001
     weight2 = np.random.randn(512, 10) / np.sqrt(512 / 2)
     bias2 = np.full(10, 0.00)
-    back_weight = np.random.randn(10,512)/np.sqrt(512/2)
+    back_weight = weight_quantize(np.random.uniform(low=-1, high=1, size=(10, 512)) / np.sqrt(512))
 
 ######## INFERENCE
 
@@ -148,8 +148,9 @@ if is_train:
             bias1 = np.add(bias1, learning_rate * temp_grad_b1)
             bias2 = np.add(bias2, learning_rate * temp_grad_b2)
 
-        weight1 = weight_quantize(weight1)
-        weight2 = weight_quantize(weight2)
+        if is_weight_quantize:
+            weight1 = weight_quantize(weight1)
+            weight2 = weight_quantize(weight2)
 
         ## TEST CODE
 
