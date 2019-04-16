@@ -1,15 +1,19 @@
 
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
+import matplotlib.pyplot as plt
 
 ######## STATUS AND CONSTANTS
 
 is_quantize = True
+is_BP_quantize = True
+is_DFA = True
+is_weight_quantize = True
 is_train = True
-EPOCH = 30
+EPOCH = 100
 batch_size = 100
-learning_rate = 0.5
-quantize_size = 10
+learning_rate = 0.1
+quantize_size = 20
 
 ######## USEFUL FUNCs
 
@@ -38,6 +42,14 @@ def stair_func(x):
     inds = np.subtract(inds,1) / quantize_size
     return inds
 
+def weight_quantize(x):                                     # [-0.1, 0.1] 0.002 간격으로 반올림하는 함수
+    a1 = np.arange(-0.1, 0.101, 0.001)
+    a2 = np.arange(-0.1, 0.102, 0.002)
+    idx = np.searchsorted(a1,x)
+    temp = 0.001 * idx - 0.1 - 0.001
+    idx2 = np.searchsorted(a2,temp)
+    return 0.002 * idx2 - 0.1
+
 ######## DATA INPUT
 
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)      # already normalized
@@ -53,11 +65,19 @@ y_test = mnist.test.labels
 
 ######## PARAMETER INITIALIZE
 
-weight1 = np.random.randn(784, 512) / np.sqrt(784 / 2)      # He initialization
-bias1 = np.full(512, 0.00)                                  # can be slight positive biased for DEAD RELUs 원래 0.001
-weight2 = np.random.randn(512, 10) / np.sqrt(512 / 2)
-bias2 = np.full(10, 0.00)
-back_weight = np.random.randn(10,512)/np.sqrt(512/2)
+if is_weight_quantize:
+    weight1 = weight_quantize(np.random.randn(784, 512) / np.sqrt(784 / 2))  # He initialization
+    bias1 = np.full(512, 0.00)  # can be slight positive biased for DEAD RELUs 원래 0.001
+    weight2 = weight_quantize(np.random.randn(512, 10) / np.sqrt(512 / 2))
+    bias2 = np.full(10, 0.00)
+    # back_weight = weight_quantize(np.random.randn(10, 512) / np.sqrt(512 / 2))
+    back_weight = weight_quantize(np.random.uniform(low=-1, high=1, size=(10, 512)) / np.sqrt(512))
+else:
+    weight1 = np.random.randn(784, 512) / np.sqrt(784 / 2)      # He initialization
+    bias1 = np.full(512, 0.00)                                  # can be slight positive biased for DEAD RELUs 원래 0.001
+    weight2 = np.random.randn(512, 10) / np.sqrt(512 / 2)
+    bias2 = np.full(10, 0.00)
+    back_weight = np.random.randn(10,512)/np.sqrt(512/2)
 
 ######## INFERENCE
 
@@ -90,14 +110,28 @@ if is_train:
             else:
                 a2 = act_relu(z2)
             z3 = np.matmul(a2, weight2) + np.tile(bias2, (batch_size,1))
-            output = z3
+
+            if is_quantize:
+                output = stair_func(z3)
+            else:
+                output = z3;
 
             # cross entropy error related code fix if needed
 
             delta3 = - output + y_train[j * batch_size : (j + 1) * batch_size]
 
-            delta2 = np.multiply(np.matmul(delta3, np.transpose(weight2)), grad_relu(a2))  # Normal BP version
-            #delta2 = np.multiply( np.matmul(delta3, (back_weight)), grad_relu(a2) )     # DFA version
+            if is_BP_quantize:
+                if is_DFA:
+                    delta2 = np.around(np.multiply(np.matmul(delta3, (back_weight)), grad_relu(a2)),
+                                       decimals=3)  # DFA version
+                else:
+                    delta2 = np.multiply(np.matmul(delta3, np.transpose(weight2)), grad_relu(a2))  # Normal BP version
+
+            else:
+                if is_DFA:
+                    delta2 = np.multiply(np.matmul(delta3, (back_weight)), grad_relu(a2))  # DFA version
+                else:
+                    delta2 = np.multiply(np.matmul(delta3, np.transpose(weight2)), grad_relu(a2))  # Normal BP version
 
             temp_grad_w2 = np.matmul(np.transpose(a2), delta3)
             temp_grad_w1 = np.matmul(np.transpose(train_data), delta2)
@@ -109,17 +143,49 @@ if is_train:
             temp_grad_b1 = np.sum(temp_grad_b1, axis=0) / batch_size
             temp_grad_b2 = np.sum(temp_grad_b2, axis=0) / batch_size
 
-            weight1 = np.add(weight1, learning_rate * temp_grad_w1)
-            weight2 = np.add(weight2, learning_rate * temp_grad_w2)
-            bias1 = np.add(bias1, learning_rate * temp_grad_b1)
-            bias2 = np.add(bias2, learning_rate * temp_grad_b2)
+            if is_weight_quantize:
+                weight1 = weight_quantize(np.add(weight1, learning_rate * temp_grad_w1))
+                weight2 = weight_quantize(np.add(weight2, learning_rate * temp_grad_w2))
+                bias1 = np.add(bias1, learning_rate * temp_grad_b1)
+                bias2 = np.add(bias2, learning_rate * temp_grad_b2)
+            else:
+                weight1 = np.add(weight1, learning_rate * temp_grad_w1)
+                weight2 = np.add(weight2, learning_rate * temp_grad_w2)
+                bias1 = np.add(bias1, learning_rate * temp_grad_b1)
+                bias2 = np.add(bias2, learning_rate * temp_grad_b2)
+
+            # if i == 0 and j == 0:
+            #     np.savetxt("weight1_0.csv", weight1, delimiter=", ")
+            #     np.savetxt("weight2_0.csv", weight2, delimiter=", ")
+            #     # x = np.ndarray.flatten(weight2)
+            #     # print('avg : ' + str(np.average(np.absolute(x))))
+            #     # n, bins, patches = plt.hist(x, bins = 10, range = (-0.005,0.005))
+            #     # n, bins, patches = plt.hist(x)
+            #     # plt.show()
+            #
+            #     # np.savetxt("info.csv", delta2, delimiter=", ")
+            #     # x = np.ndarray.flatten(a2)
+            #     # n, bins, patches = plt.hist(x)
+            #     # plt.show()
+            # elif i == 20 and j == 0:
+            #     np.savetxt("weight1_20.csv", weight1, delimiter=", ")
+            #     np.savetxt("weight2_20.csv", weight2, delimiter=", ")
+            # elif i == 50 and j == 0:
+            #     np.savetxt("weight1_50.csv", weight1, delimiter=", ")
+            #     np.savetxt("weight2_50.csv", weight2, delimiter=", ")
 
         ## TEST CODE
 
         test_node2 = np.matmul(x_test, weight1) + np.tile(bias1, (10000,1))  # x_test.size(axis=0) 해야하는데 안되서 1만 처넣음
-        test_act_node2 = act_relu(test_node2)
+        if is_quantize:
+            test_act_node2 = stair_func(act_relu(test_node2))
+        else:
+            test_act_node2 = act_relu(test_node2)
         test_node3 = np.matmul(test_act_node2, weight2) + np.tile(bias2, (10000 ,1))
-        test_output = test_node3
+        if is_quantize:
+            test_output = stair_func(test_node3)
+        else:
+            test_output = test_node3
 
         pred = np.argmax(test_output, axis=1)
         true_label = np.argmax(y_test, axis=1)
