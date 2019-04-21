@@ -1,14 +1,15 @@
+# 얘는 그냥 이제 batch 쌓는 코드 전용으로 하겠습니다
+
+
 
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
-import matplotlib.pyplot as plt
 
 ######## STATUS AND CONSTANTS
 
 is_quantize = True
 is_BP_quantize = False
 is_DFA = True
-is_weight_quantize = False
 is_train = True
 EPOCH = 25
 batch_size = 1
@@ -63,28 +64,17 @@ else:
 y_train = mnist.train.labels
 y_test = mnist.test.labels
 
-
-
-x_train = x_train[0:500]                        # 트레이닝셋 숫자 조절
-y_train = y_train[0:500]
-
-
-
 ######## PARAMETER INITIALIZE
 
-if is_weight_quantize:
-    weight1 = weight_quantize(np.random.randn(784, 512) / np.sqrt(784 / 2))  # He initialization
-    bias1 = np.full(512, 0.00)  # can be slight positive biased for DEAD RELUs 원래 0.001
-    weight2 = weight_quantize(np.random.randn(512, 10) / np.sqrt(512 / 2))
-    bias2 = np.full(10, 0.00)
-    # back_weight = weight_quantize(np.random.randn(10, 512) / np.sqrt(512 / 2))
-    back_weight = weight_quantize(np.random.uniform(low=-1, high=1, size=(10, 512)) / np.sqrt(512))
-else:
-    weight1 = np.random.randn(784, 512) / np.sqrt(784 / 2)      # He initialization
-    bias1 = np.full(512, 0.00)                                  # can be slight positive biased for DEAD RELUs 원래 0.001
-    weight2 = np.random.randn(512, 10) / np.sqrt(512 / 2)
-    bias2 = np.full(10, 0.00)
-    back_weight = np.random.randn(10,512)/np.sqrt(512/2)
+weight1 = weight_quantize(np.random.randn(784, 512) / np.sqrt(784 / 2))  # He initialization
+bias1 = np.full(512, 0.00)  # can be slight positive biased for DEAD RELUs 원래 0.001
+weight2 = weight_quantize(np.random.randn(512, 10) / np.sqrt(512 / 2))
+bias2 = np.full(10, 0.00)
+# back_weight = weight_quantize(np.random.randn(10, 512) / np.sqrt(512 / 2))
+back_weight = weight_quantize(np.random.uniform(low=-1, high=1, size=(10, 512)) / np.sqrt(512))
+
+stack_grad_weight1 = np.zeros((784, 512))
+stack_grad_weight2 = np.zeros((512, 10))
 
 ######## INFERENCE
 
@@ -150,64 +140,41 @@ if is_train:
             temp_grad_b1 = np.sum(temp_grad_b1, axis=0) / batch_size
             temp_grad_b2 = np.sum(temp_grad_b2, axis=0) / batch_size
 
+            stack_grad_weight1 += learning_rate * temp_grad_w1
+            stack_grad_weight2 += learning_rate * temp_grad_w2
 
-            # if i == 0 and j == 0:
-            #
-            #     np.savetxt("grad_weight1_0.csv", temp_grad_w1, delimiter=", ")
-            #     np.savetxt("grad_weight2_0.csv", temp_grad_w2, delimiter=", ")
-            #
-            # elif i == 20 and j == 0:
-            #     np.savetxt("grad_weight1_20.csv", temp_grad_w1, delimiter=", ")
-            #     np.savetxt("grad_weight2_20.csv", temp_grad_w2, delimiter=", ")
+            Qstack_grad_weight1 = weight_quantize(stack_grad_weight1)
+            Qstack_grad_weight2 = weight_quantize(stack_grad_weight2)
 
+            stack_grad_weight1 -= Qstack_grad_weight1
+            stack_grad_weight2 -= Qstack_grad_weight2
 
-            if is_weight_quantize:
-                weight1 = weight_quantize(np.add(weight1, learning_rate * temp_grad_w1))
-                weight2 = weight_quantize(np.add(weight2, learning_rate * temp_grad_w2))
-                bias1 = np.add(bias1, learning_rate * temp_grad_b1)
-                bias2 = np.add(bias2, learning_rate * temp_grad_b2)
-            else:
-                weight1 = np.add(weight1, learning_rate * temp_grad_w1)
-                weight2 = np.add(weight2, learning_rate * temp_grad_w2)
-                bias1 = np.add(bias1, learning_rate * temp_grad_b1)
-                bias2 = np.add(bias2, learning_rate * temp_grad_b2)
+            weight1 = np.add(weight1, Qstack_grad_weight1)
+            weight2 = np.add(weight2, Qstack_grad_weight2)
+            bias1 = np.add(bias1, learning_rate * temp_grad_b1)
+            bias2 = np.add(bias2, learning_rate * temp_grad_b2)
 
-            # if i == 0 and j == 0:
-            #     np.savetxt("weight1_0.csv", weight1, delimiter=", ")
-            #     np.savetxt("weight2_0.csv", weight2, delimiter=", ")
-            #     # x = np.ndarray.flatten(weight2)
-            #     # print('avg : ' + str(np.average(np.absolute(x))))
-            #     # n, bins, patches = plt.hist(x, bins = 10, range = (-0.005,0.005))
-            #     # n, bins, patches = plt.hist(x)
-            #     # plt.show()
-            #
-            #     # np.savetxt("info.csv", delta2, delimiter=", ")
-            #     # x = np.ndarray.flatten(a2)
-            #     # n, bins, patches = plt.hist(x)
-            #     # plt.show()
-            # elif i == 20 and j == 0:
-            #     np.savetxt("weight1_20.csv", weight1, delimiter=", ")
-            #     np.savetxt("weight2_20.csv", weight2, delimiter=", ")
+            ## TEST CODE
+            if j % 1000 == 0:
+                test_node2 = np.matmul(x_test, weight1) + np.tile(bias1,
+                                                                  (10000, 1))  # x_test.size(axis=0) 해야하는데 안되서 1만 처넣음
+                if is_quantize:
+                    test_act_node2 = stair_func(act_relu(test_node2))
+                else:
+                    test_act_node2 = act_relu(test_node2)
+                test_node3 = np.matmul(test_act_node2, weight2) + np.tile(bias2, (10000, 1))
+                if is_quantize:
+                    test_output = stair_func(test_node3)
+                else:
+                    test_output = test_node3
+
+                pred = np.argmax(test_output, axis=1)
+                true_label = np.argmax(y_test, axis=1)
+                accuracy = np.sum(np.equal(pred, true_label)) / np.size(true_label, axis=0)
+
+                print('Epoch ' + str(i + 1) + ' iter ' + str(j) + ' accuracy : ' + str(accuracy))
 
 
-        ## TEST CODE
-
-        test_node2 = np.matmul(x_test, weight1) + np.tile(bias1, (10000,1))  # x_test.size(axis=0) 해야하는데 안되서 1만 처넣음
-        if is_quantize:
-            test_act_node2 = stair_func(act_relu(test_node2))
-        else:
-            test_act_node2 = act_relu(test_node2)
-        test_node3 = np.matmul(test_act_node2, weight2) + np.tile(bias2, (10000 ,1))
-        if is_quantize:
-            test_output = stair_func(test_node3)
-        else:
-            test_output = test_node3
-
-        pred = np.argmax(test_output, axis=1)
-        true_label = np.argmax(y_test, axis=1)
-        accuracy = np.sum(np.equal(pred, true_label)) / np.size(true_label, axis=0)
-
-        print('Epoch '+ str(i+1) + ' accuracy : ' + str(accuracy))
 
 
 

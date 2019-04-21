@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b5c79471-9043-46db-afd7-505560afde7f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/L2_loss.py" beforeDir="false" afterPath="$PROJECT_DIR$/L2_loss.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main 2.py" beforeDir="false" afterPath="$PROJECT_DIR$/main 2.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,8 +38,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main 2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
+            <state relative-caret-position="447">
+              <caret line="202" column="94" lean-forward="true" selection-start-line="185" selection-start-column="12" selection-end-line="202" selection-end-column="94" />
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
               </folding>
@@ -49,8 +50,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/L2_loss.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1713">
-              <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
+            <state relative-caret-position="732">
+              <caret line="177" lean-forward="true" selection-start-line="177" selection-end-line="177" />
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
               </folding>
@@ -101,16 +102,17 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/main 2.py" />
         <option value="$PROJECT_DIR$/mnist_dataset/L2_loss.py" />
         <option value="$PROJECT_DIR$/helpers.py" />
         <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/L2_loss.py" />
         <option value="$PROJECT_DIR$/test2.py" />
+        <option value="$PROJECT_DIR$/main 2.py" />
+        <option value="$PROJECT_DIR$/L2_loss.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="118" />
     <option name="y" value="23" />
     <option name="width" value="1380" />
     <option name="height" value="946" />
@@ -156,7 +158,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test2">
+  <component name="RunManager" selected="Python.L2_loss">
     <configuration name="L2_loss" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="GP" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -264,11 +266,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test2" />
         <item itemvalue="Python.L2_loss" />
+        <item itemvalue="Python.main 2" />
+        <item itemvalue="Python.test2" />
         <item itemvalue="Python.helpers" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.main 2" />
       </list>
     </recent_temporary>
   </component>
@@ -295,7 +297,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1380" height="946" extended-state="0" />
+    <frame x="118" y="23" width="1380" height="946" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13686535" />
@@ -303,7 +305,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.24590164" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4086651" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -336,16 +338,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main 2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
-          <folding>
-            <element signature="e#1#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/helpers.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -363,10 +355,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main 2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="447">
+          <caret line="202" column="94" lean-forward="true" selection-start-line="185" selection-start-column="12" selection-end-line="202" selection-end-column="94" />
+          <folding>
+            <element signature="e#1#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/L2_loss.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1713">
-          <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
+        <state relative-caret-position="732">
+          <caret line="177" lean-forward="true" selection-start-line="177" selection-end-line="177" />
           <folding>
             <element signature="e#1#19#0" expanded="true" />
           </folding>
