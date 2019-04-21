@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 
 ######## STATUS AND CONSTANTS
 
-is_quantize = True
+is_quantize = False
 is_BP_quantize = True
-is_DFA = True
-is_weight_quantize = True
+is_DFA = False
+is_weight_quantize = False
 is_train = True
 EPOCH = 30
 batch_size = 1
@@ -62,6 +62,7 @@ else:
 
 y_train = mnist.train.labels
 y_test = mnist.test.labels
+
 
 ######## PARAMETER INITIALIZE
 

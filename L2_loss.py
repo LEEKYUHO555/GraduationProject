@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 is_quantize = True
 is_BP_quantize = False
 is_DFA = True
-is_weight_quantize = True
+is_weight_quantize = False
 is_train = True
 EPOCH = 25
 batch_size = 1

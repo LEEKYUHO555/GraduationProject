@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b5c79471-9043-46db-afd7-505560afde7f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/L2_loss.py" beforeDir="false" afterPath="$PROJECT_DIR$/L2_loss.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
     </list>
@@ -50,8 +49,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/L2_loss.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1627">
-              <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+            <state relative-caret-position="-1713">
+              <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
               </folding>
@@ -62,8 +61,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2064">
-              <caret line="139" selection-start-line="139" selection-end-line="139" />
+            <state relative-caret-position="-1556">
+              <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
               </folding>
@@ -106,8 +105,8 @@
         <option value="$PROJECT_DIR$/mnist_dataset/L2_loss.py" />
         <option value="$PROJECT_DIR$/helpers.py" />
         <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/test2.py" />
         <option value="$PROJECT_DIR$/L2_loss.py" />
+        <option value="$PROJECT_DIR$/test2.py" />
       </list>
     </option>
   </component>
@@ -157,7 +156,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.L2_loss">
+  <component name="RunManager" selected="Python.test2">
     <configuration name="L2_loss" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="GP" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -265,8 +264,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.L2_loss" />
         <item itemvalue="Python.test2" />
+        <item itemvalue="Python.L2_loss" />
         <item itemvalue="Python.helpers" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.main 2" />
@@ -356,8 +355,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2064">
-          <caret line="139" selection-start-line="139" selection-end-line="139" />
+        <state relative-caret-position="-1556">
+          <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
           <folding>
             <element signature="e#1#19#0" expanded="true" />
           </folding>
@@ -366,8 +365,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/L2_loss.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1627">
-          <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+        <state relative-caret-position="-1713">
+          <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
           <folding>
             <element signature="e#1#19#0" expanded="true" />
           </folding>
