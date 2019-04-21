@@ -1,7 +1,5 @@
 # 얘는 그냥 이제 batch 쌓는 코드 전용으로 하겠습니다
 
-
-
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 
@@ -151,6 +149,9 @@ if is_train:
 
             weight1 = np.add(weight1, Qstack_grad_weight1)
             weight2 = np.add(weight2, Qstack_grad_weight2)
+            weight1 = weight_quantize(weight1)
+            weight2 = weight_quantize(weight2)
+
             bias1 = np.add(bias1, learning_rate * temp_grad_b1)
             bias2 = np.add(bias2, learning_rate * temp_grad_b2)
 
