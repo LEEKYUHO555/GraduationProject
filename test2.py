@@ -11,8 +11,8 @@ is_DFA = True
 is_weight_quantize = True
 is_train = True
 EPOCH = 30
-batch_size = 100
-learning_rate = 0.1       # batch size 1일땐 0.001 근처로 설정해야 하는 것 같음. batch size 100일 땐 0.1 로도 충분함
+batch_size = 1
+learning_rate = 0.001       # batch size 1일땐 0.001 근처로 설정해야 하는 것 같음. batch size 100일 땐 0.1 로도 충분함
 quantize_size = 20
 
 ######## USEFUL FUNCs
@@ -145,12 +145,15 @@ if is_train:
 
             weight1 = np.add(weight1, learning_rate * temp_grad_w1)
             weight2 = np.add(weight2, learning_rate * temp_grad_w2)
+
+            if is_weight_quantize:
+                weight1 = weight_quantize(weight1)
+                weight2 = weight_quantize(weight2)
+
             bias1 = np.add(bias1, learning_rate * temp_grad_b1)
             bias2 = np.add(bias2, learning_rate * temp_grad_b2)
 
-        if is_weight_quantize:
-            weight1 = weight_quantize(weight1)
-            weight2 = weight_quantize(weight2)
+
 
         ## TEST CODE
 

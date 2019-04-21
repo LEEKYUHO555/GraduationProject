@@ -5,14 +5,14 @@ import matplotlib.pyplot as plt
 
 ######## STATUS AND CONSTANTS
 
-is_quantize = False
+is_quantize = True
 is_BP_quantize = False
 is_DFA = True
-is_weight_quantize = False
+is_weight_quantize = True
 is_train = True
-EPOCH = 100
-batch_size = 100
-learning_rate = 0.1
+EPOCH = 25
+batch_size = 1
+learning_rate = 0.01
 quantize_size = 20
 
 ######## USEFUL FUNCs
@@ -62,6 +62,13 @@ else:
 
 y_train = mnist.train.labels
 y_test = mnist.test.labels
+
+
+
+x_train = x_train[0:500]                        # 트레이닝셋 숫자 조절
+y_train = y_train[0:500]
+
+
 
 ######## PARAMETER INITIALIZE
 
@@ -143,6 +150,17 @@ if is_train:
             temp_grad_b1 = np.sum(temp_grad_b1, axis=0) / batch_size
             temp_grad_b2 = np.sum(temp_grad_b2, axis=0) / batch_size
 
+
+            # if i == 0 and j == 0:
+            #
+            #     np.savetxt("grad_weight1_0.csv", temp_grad_w1, delimiter=", ")
+            #     np.savetxt("grad_weight2_0.csv", temp_grad_w2, delimiter=", ")
+            #
+            # elif i == 20 and j == 0:
+            #     np.savetxt("grad_weight1_20.csv", temp_grad_w1, delimiter=", ")
+            #     np.savetxt("grad_weight2_20.csv", temp_grad_w2, delimiter=", ")
+
+
             if is_weight_quantize:
                 weight1 = weight_quantize(np.add(weight1, learning_rate * temp_grad_w1))
                 weight2 = weight_quantize(np.add(weight2, learning_rate * temp_grad_w2))
@@ -170,9 +188,7 @@ if is_train:
             # elif i == 20 and j == 0:
             #     np.savetxt("weight1_20.csv", weight1, delimiter=", ")
             #     np.savetxt("weight2_20.csv", weight2, delimiter=", ")
-            # elif i == 50 and j == 0:
-            #     np.savetxt("weight1_50.csv", weight1, delimiter=", ")
-            #     np.savetxt("weight2_50.csv", weight2, delimiter=", ")
+
 
         ## TEST CODE
 
