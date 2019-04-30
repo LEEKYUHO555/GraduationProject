@@ -1,18 +1,21 @@
 import numpy as np
 
-def weight_quantize(x):
-    a1 = np.arange(-0.1, 0.101, 0.001)
-    a2 = np.arange(-0.1, 0.102, 0.002)
-    idx = np.searchsorted(a1,x)
-    temp = 0.001 * idx - 0.1 - 0.001
-    idx2 = np.searchsorted(a2,temp)
-    return 0.002 * idx2 - 0.1
+# bias1 = np.random.uniform(low=-1, high=1, size=(2, 3))
+# print(bias1)
+# bias2 = bias1[...,np.newaxis]
+# print(bias2)
+# bias3 = np.tile(bias2,(1,1,5))
+# print(bias3)
+# print(np.shape(bias3))
 
-temp = np.array([[-0.2, -0.08132, 0.07642], [0.3, 0.002432, 0.000231]])
-print(weight_quantize(temp))
+def compare_threshold(B):
+    A = np.empty_like(B)
+    A[:] = B
+    A.fill(1)
 
+    return np.int_(B > A)
 
+matrix= np.array([[0.1,1.1],[0.2,1.3]])
 
-
-# print(np.searchsorted([0,1,2,3,4], 1, side='left', ))
-# print(np.searchsorted([0,1,2,3,4], 1, side='right', ))
+print(matrix)
+print(compare_threshold(matrix))

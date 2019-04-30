@@ -200,7 +200,7 @@ if is_train:
                 true_label = np.argmax(y_test, axis=1)
                 accuracy = np.sum(np.equal(pred, true_label)) / np.size(true_label, axis=0)
 
-                print('Epoch '+ str(i+1) + ' iter ' + str(j) + ' accuracy : ' + str(accuracy))
+                print(str(j) + ' ' + str(accuracy))
 
 
 
