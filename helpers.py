@@ -1,21 +1,22 @@
 import numpy as np
 
-# bias1 = np.random.uniform(low=-1, high=1, size=(2, 3))
-# print(bias1)
-# bias2 = bias1[...,np.newaxis]
-# print(bias2)
-# bias3 = np.tile(bias2,(1,1,5))
-# print(bias3)
-# print(np.shape(bias3))
+TIMESTAMP = 5
+#
+# x_train = np.array([[0.2, 1, 0.8], [0, 0.6, 0.5]])
+# x_train_timestamp = np.zeros((2, 3, TIMESTAMP))
+#
+# for i in range(2):
+#     for j in range(3):
+#         prob = x_train[i][j]
+#         x_train_timestamp[i][j] = np.random.choice([0, 1], size=5, p=[1 - prob, prob])
+#
+# print(x_train_timestamp)
+#
+# x_train_timestamp.tofile('test.dat')
 
-def compare_threshold(B):
-    A = np.empty_like(B)
-    A[:] = B
-    A.fill(1)
+b = np.loadtxt('train_label.txt', dtype=int)
+print(np.shape(b))
 
-    return np.int_(B > A)
-
-matrix= np.array([[0.1,1.1],[0.2,1.3]])
-
-print(matrix)
-print(compare_threshold(matrix))
+# c = np.fromfile('test.dat', dtype=float)
+# c = np.reshape(c, (2,3,TIMESTAMP))
+# print(c)

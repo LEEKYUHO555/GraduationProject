@@ -1,53 +1,36 @@
 import numpy as np
-from tensorflow.examples.tutorials.mnist import input_data
 
 ######## STATUS AND CONSTANTS
 
-EPOCH = 30
+EPOCH = 1
 TIMESTAMP = 5
-learning_rate = 0.001
+learning_rate = 0.01
+is_DFA = True
+
+# ######## DATA INPUT
+#
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)      # already normalized
+#
+# x_train = mnist.train.images
+# x_test = mnist.test.images
+#
+# y_train = mnist.train.labels
+# y_test = mnist.test.labels
 
 ######## DATA INPUT
 
-mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)      # already normalized
+x_train_timestamp = np.fromfile('Data/train_data.dat', dtype=float)
+x_train_timestamp = np.reshape(x_train_timestamp, (55000, 784, TIMESTAMP))
+x_test_timestamp = np.fromfile('Data/test_data.dat', dtype=float)
+x_test_timestamp = np.reshape(x_test_timestamp, (10000, 784, TIMESTAMP))
 
-x_train = mnist.train.images
-x_test = mnist.test.images
+y_train = np.loadtxt('Data/train_label.txt', dtype=int)
+y_test = np.loadtxt('Data/test_label.txt', dtype=int)
 
-y_train = mnist.train.labels
-y_test = mnist.test.labels
+train_DATASIZE = np.size(y_train, axis=0)
+test_DATASIZE = np.size(y_test, axis=0)
 
-x_train = x_train[0:300]
-y_train = y_train[0:300]
-
-x_test = x_test[0:100]
-y_test = y_test[0:100]
-
-######## DATA TO TIME-DOMAIN
-
-train_DATASIZE = np.size(x_train, axis=0)
-test_DATASIZE = np.size(x_test, axis=0)
-
-x_train_timestamp = np.zeros((train_DATASIZE, 784, TIMESTAMP))
-x_test_timestamp = np.zeros((test_DATASIZE, 784, TIMESTAMP))
-
-for i in range(train_DATASIZE):
-    for j in range(784):
-        prob = x_train[i][j]
-        x_train_timestamp[i][j] = np.random.choice([0, 1], size=5, p=[1 - prob, prob])
-    if i%100 ==0:
-        print('train ' + str(i/train_DATASIZE))
-
-# for i in range(test_DATASIZE):
-#     for j in range(784):
-#         prob = x_test[i][j]
-#         x_test_timestamp[i][j] = np.random.choice([0, 1], size=5, p=[1 - prob, prob])
-
-# y_train_timestamp = y_train[..., np.newaxis]
-# y_train_timestamp = np.tile(y_train_timestamp,(1,1,5))
-#
-# y_test_timestamp = y_test[..., np.newaxis]
-# y_test_timestamp = np.tile(y_test_timestamp,(1,1,5))
+print('Input finished!')
 
 ######## PARAMETER INITIALIZE
 
@@ -78,11 +61,15 @@ def compare_threshold(B):
 tot_cnt = 0
 acc_cnt = 0
 
+print('Training starts!')
+
 for k in range(EPOCH):
-    
+
     for i in range(train_DATASIZE):                         #Data shape : [datasize, pixels, timestamp]
         inf2 = np.zeros(512)
         inf3 = np.zeros(10)
+
+        pred = np.zeros(10)
 
         for j in range(TIMESTAMP):
 
@@ -110,7 +97,10 @@ for k in range(EPOCH):
             output = a3
 
             delta3 = - output + y_train[i]
-            delta2 = np.multiply(np.matmul(delta3, (back_weight)), grad_relu(i2))       # 여기 grad relu 어떻게?
+            if is_DFA:
+                delta2 = np.multiply(np.matmul(delta3, (back_weight)), grad_relu(i2))       # 여기 grad relu 어떻게?
+            else:
+                delta2 = np.multiply(np.matmul(delta3, np.transpose(weight2)), grad_relu(i2))
 
             temp_grad_w2 = np.matmul(np.reshape(a2,(512,1)), np.reshape(delta3,(1,10)))
             temp_grad_w1 = np.matmul(np.reshape(a1,(784,1)), np.reshape(delta2,(1,512)))
@@ -123,14 +113,26 @@ for k in range(EPOCH):
             bias1 = np.add(bias1, learning_rate * temp_grad_b1)
             bias2 = np.add(bias2, learning_rate * temp_grad_b2)
 
-            ## train accuracy
-            pred = np.argmax(output)
-            true_label = np.argmax(y_train[i])
-            acc_cnt += np.equal(pred, true_label)
-            tot_cnt += 1
+            # ## train accuracy
+            # pred = np.argmax(output)
+            # true_label = np.argmax(y_train[i])
+            # acc_cnt += np.equal(pred, true_label)
+            # tot_cnt += 1
 
-        if i % 100 == 0:
-            print(str(i) + ' ' + str(acc_cnt/tot_cnt))
+            pred = np.add(pred, output)
+
+        final_result = np.argmax(pred)
+        true_label = np.argmax(y_train[i])
+        acc_cnt += np.equal(final_result, true_label)
+        tot_cnt += 1
+
+        if i % 1000 == 0:
+            print('iter ' + str(i) + ': ' + str(acc_cnt/tot_cnt))
+            acc_cnt = 0
+            tot_cnt = 0
+
+        if i == 15000:
+            learning_rate /= 10
 
             # ## TEST CODE
             # if j % 1000 == 0:
