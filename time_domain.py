@@ -6,6 +6,7 @@ EPOCH = 1
 TIMESTAMP = 5
 learning_rate = 0.01
 is_DFA = True
+is_Weight_clip = True
 
 # ######## DATA INPUT
 #
@@ -107,8 +108,12 @@ for k in range(EPOCH):
             temp_grad_b2 = delta3
             temp_grad_b1 = delta2
 
-            weight1 = np.add(weight1, learning_rate * temp_grad_w1)
-            weight2 = np.add(weight2, learning_rate * temp_grad_w2)
+            if is_Weight_clip:
+                weight1 = np.clip(np.add(weight1, learning_rate * temp_grad_w1), a_min=-0.1, a_max=0.1)
+                weight2 = np.clip(np.add(weight2, learning_rate * temp_grad_w2), a_min=-0.1, a_max=0.1)
+            else:
+                weight1 = np.add(weight1, learning_rate * temp_grad_w1)
+                weight2 = np.add(weight2, learning_rate * temp_grad_w2)
 
             bias1 = np.add(bias1, learning_rate * temp_grad_b1)
             bias2 = np.add(bias2, learning_rate * temp_grad_b2)
