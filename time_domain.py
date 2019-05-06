@@ -25,9 +25,9 @@ print('Input finished!')
 
 ######## PARAMETER INITIALIZE
 
-weight1 = np.random.randn(784, 512) / np.sqrt(784 / 2)  # He initialization
+weight1 = np.random.randn(784, 512) / np.sqrt(784)
 bias1 = np.full(512, 0.00)  # can be slight positive biased for DEAD RELUs 원래 0.001
-weight2 = np.random.randn(512, 10) / np.sqrt(512 / 2)
+weight2 = np.random.randn(512, 10) / np.sqrt(512)
 bias2 = np.full(10, 0.00)
 back_weight = np.random.uniform(low=-1, high=1, size=(10, 512)) / np.sqrt(512)
 
@@ -43,7 +43,7 @@ def grad_relu(x):
 def compare_threshold(B):
     A = np.empty_like(B)
     A[:] = B
-    A.fill(1)                                               # Threshold = 1
+    A.fill(0.8)                                               # Threshold = 1
 
     return np.int_(B > A)
 
