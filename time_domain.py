@@ -126,11 +126,11 @@ for k in range(EPOCH):
         tot_cnt += 1
 
         if i % 1000 == 0:
-            print('iter ' + str(i) + ': ' + str(acc_cnt/tot_cnt))
+            print('Epoch ' + str(k) + ', iter ' + str(i) + ': ' + str(acc_cnt/tot_cnt))
             acc_cnt = 0
             tot_cnt = 0
 
-        if i==5000:
+        if i == 5000:
             learning_rate /= 10
 
         if i == 15000:

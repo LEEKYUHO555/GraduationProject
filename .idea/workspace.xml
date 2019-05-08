@@ -54,8 +54,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/time_domain.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1628">
-              <caret line="6" column="19" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
+            <state relative-caret-position="459">
+              <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
             </state>
           </provider>
         </entry>
@@ -309,7 +309,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1380" height="946" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13686535" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -389,8 +388,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/time_domain.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1628">
-          <caret line="6" column="19" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
+        <state relative-caret-position="459">
+          <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
         </state>
       </provider>
     </entry>
