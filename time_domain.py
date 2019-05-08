@@ -91,9 +91,9 @@ for k in range(EPOCH):
 
             delta3 = - output + y_train[i]
             if is_DFA:
-                delta2 = np.multiply(np.matmul(delta3, (back_weight)), grad_relu(i2))       # 여기 grad relu 어떻게?
+                delta2 = np.multiply(np.matmul(delta3, (back_weight)), grad_relu(inf2))       # 여기 grad relu 어떻게?
             else:
-                delta2 = np.multiply(np.matmul(delta3, np.transpose(weight2)), grad_relu(i2))
+                delta2 = np.multiply(np.matmul(delta3, np.transpose(weight2)), grad_relu(inf2))
 
             temp_grad_w2 = np.matmul(np.reshape(a2,(512,1)), np.reshape(delta3,(1,10)))
             temp_grad_w1 = np.matmul(np.reshape(a1,(784,1)), np.reshape(delta2,(1,512)))
