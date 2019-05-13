@@ -2,9 +2,9 @@ import numpy as np
 
 ######## STATUS AND CONSTANTS
 
-EPOCH = 1
+EPOCH = 50
 TIMESTAMP = 5
-learning_rate = 0.01
+learning_rate = 0.0001
 is_DFA = True
 is_Weight_clip = True
 
@@ -91,9 +91,9 @@ for k in range(EPOCH):
 
             delta3 = - output + y_train[i]
             if is_DFA:
-                delta2 = np.multiply(np.matmul(delta3, (back_weight)), grad_relu(inf2))       # 여기 grad relu 어떻게?
+                delta2 = np.multiply(np.matmul(delta3, (back_weight)), grad_relu(a2))       # 여기 grad relu 어떻게?
             else:
-                delta2 = np.multiply(np.matmul(delta3, np.transpose(weight2)), grad_relu(inf2))
+                delta2 = np.multiply(np.matmul(delta3, np.transpose(weight2)), grad_relu(a2))
 
             temp_grad_w2 = np.matmul(np.reshape(a2,(512,1)), np.reshape(delta3,(1,10)))
             temp_grad_w1 = np.matmul(np.reshape(a1,(784,1)), np.reshape(delta2,(1,512)))
@@ -129,12 +129,6 @@ for k in range(EPOCH):
             print('Epoch ' + str(k) + ', iter ' + str(i) + ': ' + str(acc_cnt/tot_cnt))
             acc_cnt = 0
             tot_cnt = 0
-
-        if i == 5000:
-            learning_rate /= 10
-
-        if i == 15000:
-            learning_rate /= 10
 
         ######## TEST
         if(i % 1000 == 0):
