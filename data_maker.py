@@ -28,9 +28,8 @@ for i in range(train_DATASIZE):
     if i%1000 ==0:
         print('train ' + str(i/train_DATASIZE))
 
-x_train_timestamp.tofile('train_data.dat')
-np.savetxt('train_label.txt', y_train, fmt='%d')
-y_train.tofile('train_label.dat')
+x_train_timestamp.tofile('Data/train_data.dat')
+np.savetxt('Data/train_label.txt', y_train, fmt='%d')
 
 for i in range(test_DATASIZE):
     for j in range(784):
@@ -39,6 +38,5 @@ for i in range(test_DATASIZE):
     if i%1000 ==0:
         print('test ' + str(i/test_DATASIZE))
 
-x_test_timestamp.tofile('test_data.dat')
-np.savetxt('test_label.txt', y_test, fmt='%d')
-y_test.tofile('test_label.dat')
+x_test_timestamp.tofile('Data/test_data.dat')
+np.savetxt('Data/test_label.txt', y_test, fmt='%d')
