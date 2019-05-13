@@ -2,7 +2,7 @@ import numpy as np
 
 ######## STATUS AND CONSTANTS
 
-EPOCH = 1
+EPOCH = 10
 TIMESTAMP = 5
 learning_rate = 0.01
 is_DFA = True
