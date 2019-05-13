@@ -29,7 +29,7 @@ weight1 = np.random.randn(784, 512) / np.sqrt(784)
 bias1 = np.full(512, 0.00)  # can be slight positive biased for DEAD RELUs 원래 0.001
 weight2 = np.random.randn(512, 10) / np.sqrt(512)
 bias2 = np.full(10, 0.00)
-back_weight = np.random.uniform(low=-1, high=1, size=(10, 512)) / np.sqrt(512)
+back_weight = np.random.uniform(low=-1, high=1, size=(10, 512)) / np.sqrt(512/6)
 
 ######## USEFUL FUNCs
 
@@ -91,7 +91,7 @@ for k in range(EPOCH):
 
             delta3 = - output + y_train[i]
             if is_DFA:
-                delta2 = np.multiply(np.matmul(delta3, (back_weight)), grad_relu(inf2))       # 여기 grad relu 어떻게?
+                delta2 = np.matmul(delta3, (back_weight))       # 여기 grad relu 어떻게?
             else:
                 delta2 = np.multiply(np.matmul(delta3, np.transpose(weight2)), grad_relu(inf2))
 
